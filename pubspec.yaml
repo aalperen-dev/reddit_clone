@@ -18,4 +18,11 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/
+    - assets/fonts/
+    - assets/images/
+
+flutter_assets:
+  assets_path: assets/
+  output_path: lib/core/constants/
+  filename: assets.dart
+  # class_name: Assets

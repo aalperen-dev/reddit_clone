@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:reddit_clone/features/screens/login_screen.dart';
 import 'package:reddit_clone/theme/pallete.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MainApp());
 }
 
