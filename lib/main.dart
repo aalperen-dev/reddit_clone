@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reddit_clone/theme/pallete.dart';
 
 void main() {
   runApp(const MainApp());
@@ -9,8 +10,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
+    return MaterialApp(
+      title: 'Reddit Clone',
+      theme: Pallete.darkModeAppTheme,
+      home: const Scaffold(
         body: Center(
           child: Text('Hello World!'),
         ),
