@@ -39,6 +39,7 @@ class LoginScreen extends StatelessWidget {
             Assets.assetsImagesLoginEmote,
             height: 400,
           ),
+          //
         ],
       ),
     );
