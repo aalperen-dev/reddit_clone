@@ -12,7 +12,7 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Image.asset(
-          Assets.assetsImagesLogo,
+          Assets.logo,
           height: 40,
         ),
         actions: [
@@ -39,7 +39,7 @@ class LoginScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(
-              Assets.assetsImagesLoginEmote,
+              Assets.loginEmote,
               height: 300,
             ),
           ),
