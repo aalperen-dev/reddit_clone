@@ -1,57 +1,33 @@
 class Assets {
   Assets._();
 
-  /// Assets for assetsFontsMyFlutterApp
-  /// assets/fonts/MyFlutterApp.ttf
-  static const String assetsFontsMyFlutterApp = "assets/fonts/MyFlutterApp.ttf";
+  static const String myFlutterAppFont = "assets/fonts/MyFlutterApp.ttf";
 
-  /// Assets for assetsImagesAwardsAwesomeanswer
-  /// assets/images/awards/awesomeanswer.png
-  static const String assetsImagesAwardsAwesomeanswer =
+  static const String awardsAwesomeAnswer =
       "assets/images/awards/awesomeanswer.png";
 
-  /// Assets for assetsImagesAwardsGold
-  /// assets/images/awards/gold.png
-  static const String assetsImagesAwardsGold = "assets/images/awards/gold.png";
+  static const String awardsGold = "assets/images/awards/gold.png";
 
-  /// Assets for assetsImagesAwardsHelpful
-  /// assets/images/awards/helpful.png
-  static const String assetsImagesAwardsHelpful =
-      "assets/images/awards/helpful.png";
+  static const String awardsHelpful = "assets/images/awards/helpful.png";
 
-  /// Assets for assetsImagesAwardsPlatinum
-  /// assets/images/awards/platinum.png
-  static const String assetsImagesAwardsPlatinum =
-      "assets/images/awards/platinum.png";
+  static const String awardsPlatinum = "assets/images/awards/platinum.png";
 
-  /// Assets for assetsImagesAwardsPlusone
-  /// assets/images/awards/plusone.png
-  static const String assetsImagesAwardsPlusone =
-      "assets/images/awards/plusone.png";
+  static const String awardsPlusone = "assets/images/awards/plusone.png";
 
-  /// Assets for assetsImagesAwardsRocket
-  /// assets/images/awards/rocket.png
-  static const String assetsImagesAwardsRocket =
-      "assets/images/awards/rocket.png";
+  static const String awardsRocket = "assets/images/awards/rocket.png";
 
-  /// Assets for assetsImagesAwardsThankyou
-  /// assets/images/awards/thankyou.png
-  static const String assetsImagesAwardsThankyou =
-      "assets/images/awards/thankyou.png";
+  static const String awardsThankyou = "assets/images/awards/thankyou.png";
 
-  /// Assets for assetsImagesAwardsTil
-  /// assets/images/awards/til.png
-  static const String assetsImagesAwardsTil = "assets/images/awards/til.png";
+  static const String awardsTil = "assets/images/awards/til.png";
 
-  /// Assets for assetsImagesGoogle
-  /// assets/images/google.png
-  static const String assetsImagesGoogle = "assets/images/google.png";
+  static const String google = "assets/images/google.png";
 
-  /// Assets for assetsImagesLoginEmote
-  /// assets/images/loginEmote.png
-  static const String assetsImagesLoginEmote = "assets/images/loginEmote.png";
+  static const String loginEmote = "assets/images/loginEmote.png";
 
-  /// Assets for assetsImagesLogo
-  /// assets/images/logo.png
-  static const String assetsImagesLogo = "assets/images/logo.png";
+  static const String logo = "assets/images/logo.png";
+
+  static const bannerDefault =
+      'https://thumbs.dreamstime.com/b/abstract-stained-pattern-rectangle-background-blue-sky-over-fiery-red-orange-color-modern-painting-art-watercolor-effe-texture-123047399.jpg';
+  static const avatarDefault =
+      'https://external-preview.redd.it/5kh5OreeLd85QsqYO1Xz_4XSLYwZntfjqou-8fyBFoE.png?auto=webp&s=dbdabd04c399ce9c761ff899f5d38656d1de87c2';
 }

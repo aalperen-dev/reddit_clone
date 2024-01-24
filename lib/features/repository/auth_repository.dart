@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:reddit_clone/core/constants/constants.dart';
+import 'package:reddit_clone/core/constants/firebase_constants.dart';
 import 'package:reddit_clone/core/providers/firebase_provider.dart';
+import 'package:reddit_clone/models/user_model.dart';
 
 final authRepositoryProvider = Provider((ref) {
   return AuthRepository(
@@ -25,6 +28,10 @@ class AuthRepository {
         _firebaseAuth = firebaseAuth,
         _googleSignIn = googleSignIn;
 
+  // getter
+  CollectionReference get _users =>
+      _firebaseFirestore.collection(FirebaseConstants.usersCollection);
+
   void signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
@@ -41,6 +48,20 @@ class AuthRepository {
           await _firebaseAuth.signInWithCredential(credential);
 
       print(userCredential.user?.email);
+
+      UserModel userModel;
+      if (userCredential.additionalUserInfo!.isNewUser) {
+        userModel = UserModel(
+          uid: userCredential.user!.uid,
+          name: userCredential.user!.displayName!,
+          profilePic: userCredential.user!.photoURL ?? Assets.avatarDefault,
+          banner: Assets.bannerDefault,
+          isAuthenticated: true,
+          karma: 0,
+          awards: [],
+        );
+        await _users.doc(userCredential.user!.uid).set(userModel.toMap());
+      } else {}
     } catch (e) {
       print(e);
     }

@@ -18,7 +18,7 @@ class SignInButton extends ConsumerWidget {
       child: ElevatedButton.icon(
         onPressed: () => signInWithGoogle(ref),
         icon: Image.asset(
-          Assets.assetsImagesGoogle,
+          Assets.google,
           width: 35,
         ),
         label: const Text(
