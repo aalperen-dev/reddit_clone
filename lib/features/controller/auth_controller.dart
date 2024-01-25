@@ -3,21 +3,35 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/features/repository/auth_repository.dart';
 
 import '../../core/utils/utilities.dart';
+import '../../models/user_model.dart';
 
-final authControllerProvider = Provider((ref) {
-  return ref.read(authRepositoryProvider);
+final userProvider = StateProvider<UserModel?>((ref) {
+  return null;
 });
 
-class AuthController {
-  final AuthRepository _authRepository;
+final authControllerProvider =
+    StateNotifierProvider<AuthController, bool>((ref) {
+  return AuthController(
+      authRepository: ref.watch(authRepositoryProvider), ref: ref);
+});
 
-  AuthController({required AuthRepository authRepository})
-      : _authRepository = authRepository;
+class AuthController extends StateNotifier<bool> {
+  final AuthRepository _authRepository;
+  final Ref _ref;
+
+  AuthController({required AuthRepository authRepository, required Ref ref})
+      : _authRepository = authRepository,
+        _ref = ref,
+        super(false);
 
   void signInWithGoogle(BuildContext context) async {
+    state = true;
     final user = await _authRepository.signInWithGoogle();
-
-    user.fold((l) => showSnackBar(context, l.message.toString()),
-        (r) => showSnackBar(context, r.name));
+    state = false;
+    user.fold(
+      (l) => showSnackBar(context, l.message.toString()),
+      (userModel) =>
+          _ref.read(userProvider.notifier).update((state) => userModel),
+    );
   }
 }
