@@ -1,9 +1,11 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 
 class CummunityListDrawer extends ConsumerWidget {
-  const CummunityListDrawer({super.key});
+  const CummunityListDrawer({
+    super.key,
+  });
 
   void navigateToCreateCommunity(BuildContext context) {
     Routemaster.of(context).push('/create-community');
@@ -18,7 +20,10 @@ class CummunityListDrawer extends ConsumerWidget {
             ListTile(
               leading: const Icon(Icons.add),
               title: const Text('Crate a community'),
-              onTap: () => navigateToCreateCommunity(context),
+              onTap: () {
+                Scaffold.of(context).closeDrawer();
+                navigateToCreateCommunity(context);
+              },
             ),
           ],
         ),
