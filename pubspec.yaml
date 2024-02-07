@@ -7,12 +7,12 @@ environment:
   sdk: ">=3.2.3 <4.0.0"
 
 dependencies:
-  cloud_firestore: ^4.15.3
+  cloud_firestore: ^4.15.4
   dotted_border: ^2.1.0
   file_picker: ^6.1.1
-  firebase_auth: ^4.17.3
-  firebase_core: ^2.25.3
-  firebase_storage: ^11.6.4
+  firebase_auth: ^4.17.4
+  firebase_core: ^2.25.4
+  firebase_storage: ^11.6.5
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.4.10

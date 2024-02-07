@@ -15,7 +15,7 @@ void showSnackBar(
 }
 
 Future<FilePickerResult?> pickImage() async {
-  final image = await FilePicker.platform.pickFiles(type: FileType.image);
+  final image = await FilePicker.platform.pickFiles(type: FileType.any);
 
   return image;
 }
