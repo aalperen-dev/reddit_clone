@@ -18,12 +18,18 @@ class StorageRepository {
   StorageRepository({required FirebaseStorage firebaseStorage})
       : _firebaseStorage = firebaseStorage;
 
-  FutureEither<String> storeFiles(
-      {required String path, required String id, required File? file}) async {
+  FutureEither<String> storeFiles({
+    required String path,
+    required String id,
+    required File? file,
+  }) async {
     try {
       final ref = _firebaseStorage.ref().child(path).child(id);
 
-      UploadTask uploadTask = ref.putFile(file!);
+      UploadTask uploadTask = ref.putFile(
+        file!,
+        SettableMetadata(contentType: 'image/jpg'),
+      );
 
       final snapshot = await uploadTask;
 
