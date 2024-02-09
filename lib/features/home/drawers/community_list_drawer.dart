@@ -45,7 +45,10 @@ class CummunityListDrawer extends ConsumerWidget {
                             backgroundImage: NetworkImage(community.avatar),
                           ),
                           title: Text('r/${community.name}'),
-                          onTap: () => navigateToCommunity(context, community),
+                          onTap: () {
+                            navigateToCommunity(context, community);
+                            Scaffold.of(context).closeDrawer();
+                          },
                         );
                       },
                     ),
