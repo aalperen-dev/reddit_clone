@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reddit_clone/features/repository/auth_repository.dart';
+import 'package:reddit_clone/features/auth/repository/auth_repository.dart';
 
-import '../../core/utils/utilities.dart';
-import '../../models/user_model.dart';
+import '../../../core/utils/utilities.dart';
+import '../../../models/user_model.dart';
 
 final userProvider = StateProvider<UserModel?>((ref) {
   return null;
@@ -53,5 +53,9 @@ class AuthController extends StateNotifier<bool> {
     String uid,
   ) {
     return _authRepository.getUserData(uid);
+  }
+
+  void signOut() async {
+    _authRepository.signOut();
   }
 }
