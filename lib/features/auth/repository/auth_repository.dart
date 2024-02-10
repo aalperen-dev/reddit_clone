@@ -9,7 +9,7 @@ import 'package:reddit_clone/core/failure.dart';
 import 'package:reddit_clone/core/providers/firebase_provider.dart';
 import 'package:reddit_clone/models/user_model.dart';
 
-import '../../core/type_defs.dart';
+import '../../../core/type_defs.dart';
 
 final authRepositoryProvider = Provider((ref) {
   return AuthRepository(
@@ -85,5 +85,10 @@ class AuthRepository {
   ) {
     return _users.doc(uid).snapshots().map(
         (event) => UserModel.fromMap(event.data() as Map<String, dynamic>));
+  }
+
+  void signOut() async {
+    await _googleSignIn.signOut();
+    await _firebaseAuth.signOut();
   }
 }
