@@ -25,7 +25,7 @@ class ModToolsScreen extends StatelessWidget {
       body: Column(
         children: [
           ListTile(
-            onTap: () {},
+            onTap: () => navigateToAddMods(context),
             title: const Text('Add Moderators'),
             leading: const Icon(Icons.add_moderator),
           ),
