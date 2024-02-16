@@ -16,13 +16,36 @@ class AddModsScreen extends ConsumerStatefulWidget {
 }
 
 class _AddModsScreenState extends ConsumerState<AddModsScreen> {
+  Set<String> uids = {};
+  int ctr = 0;
+
+  void addUid(String uid) {
+    setState(() {
+      uids.add(uid);
+    });
+  }
+
+  void removeUid(String uid) {
+    setState(() {
+      uids.remove(uid);
+    });
+  }
+
+  void saveMods() {
+    ref.read(communityControllerProvider.notifier).addMods(
+          widget.name,
+          uids.toList(),
+          context,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => saveMods(),
             icon: const Icon(Icons.done),
           ),
         ],
@@ -33,11 +56,23 @@ class _AddModsScreenState extends ConsumerState<AddModsScreen> {
               itemBuilder: (context, index) {
                 final member = community.members[index];
                 return ref.watch(getUserDataProvider(member)).when(
-                      data: (user) => CheckboxListTile(
-                        title: Text(user.name),
-                        value: true,
-                        onChanged: (value) {},
-                      ),
+                      data: (user) {
+                        if (community.mods.contains(member) && ctr == 0) {
+                          uids.add(member);
+                        }
+                        ctr++;
+                        return CheckboxListTile(
+                          title: Text(user.name),
+                          value: uids.contains(user.uid),
+                          onChanged: (value) {
+                            if (value!) {
+                              addUid(user.uid);
+                            } else {
+                              removeUid(user.uid);
+                            }
+                          },
+                        );
+                      },
                       error: (error, stackTrace) =>
                           ErrorText(error: error.toString()),
                       loading: () => const Loader(),
