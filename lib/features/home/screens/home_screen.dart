@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:reddit_clone/core/constants/constants.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/features/home/delegate/search_community_delegate.dart';
 import 'package:reddit_clone/features/home/drawers/community_list_drawer.dart';
 import 'package:reddit_clone/features/home/drawers/profile_drawer.dart';
+import 'package:reddit_clone/theme/pallete.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -12,6 +15,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  int _page = 0;
+
   void displayDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
   }
@@ -20,9 +25,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     Scaffold.of(context).openEndDrawer();
   }
 
+  void onPageChange(int page) {
+    setState(() {
+      _page = page;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider)!;
+    final currentTheme = ref.watch(themeNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -55,11 +67,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           )
         ],
       ),
-      body: Center(
-        child: Text(user.name),
-      ),
+      body: Assets.tabWidgets[_page],
       drawer: const CummunityListDrawer(),
       endDrawer: const ProfileDrawer(),
+      bottomNavigationBar: CupertinoTabBar(
+        activeColor: currentTheme.iconTheme.color,
+        backgroundColor: currentTheme.scaffoldBackgroundColor,
+        currentIndex: _page,
+        onTap: (value) => onPageChange(value),
+        items: const [
+          BottomNavigationBarItem(
+            label: '',
+            icon: Icon(
+              Icons.home,
+            ),
+          ),
+          BottomNavigationBarItem(
+            label: '',
+            icon: Icon(
+              Icons.add,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
