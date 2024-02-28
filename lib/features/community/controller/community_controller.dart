@@ -68,8 +68,8 @@ class CommunityController extends StateNotifier<bool> {
 
     final res = await _communityRepository.createCommunity(communityModel);
     state = false;
-    res.fold((l) => showSnackBar(context, l.message), (r) {
-      showSnackBar(context, 'Community created successfully!');
+    res.fold((l) => showSnackbar(context, l.message), (r) {
+      showSnackbar(context, 'Community created successfully!');
       Routemaster.of(context).push('/');
     });
   }
@@ -89,11 +89,11 @@ class CommunityController extends StateNotifier<bool> {
           communityModel.name, user.uid);
     }
 
-    return res.fold((l) => showSnackBar(context, l.message), (r) {
+    return res.fold((l) => showSnackbar(context, l.message), (r) {
       if (communityModel.members.contains(user.uid)) {
-        showSnackBar(context, 'Community left successfully!');
+        showSnackbar(context, 'Community left successfully!');
       } else {
-        showSnackBar(context, 'Community joined successfully!');
+        showSnackbar(context, 'Community joined successfully!');
       }
     });
   }
@@ -122,7 +122,7 @@ class CommunityController extends StateNotifier<bool> {
         file: profileFile,
       );
       res.fold(
-        (l) => showSnackBar(context, l.message),
+        (l) => showSnackbar(context, l.message),
         (r) => communityModel = communityModel.copyWith(avatar: r),
       );
     }
@@ -133,7 +133,7 @@ class CommunityController extends StateNotifier<bool> {
         file: bannerFile,
       );
       res.fold(
-        (l) => showSnackBar(context, l.message),
+        (l) => showSnackbar(context, l.message),
         (r) => communityModel = communityModel.copyWith(banner: r),
       );
     }
@@ -141,7 +141,7 @@ class CommunityController extends StateNotifier<bool> {
     final res = await _communityRepository.editCommunity(communityModel);
     state = false;
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackbar(context, l.message),
       (r) => Routemaster.of(context).pop(),
     );
   }
@@ -158,7 +158,7 @@ class CommunityController extends StateNotifier<bool> {
     final res = await _communityRepository.addMods(communityName, uids);
 
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackbar(context, l.message),
       (r) => Routemaster.of(context).pop(),
     );
   }
