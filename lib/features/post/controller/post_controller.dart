@@ -161,4 +161,12 @@ class PostController extends StateNotifier<bool> {
       },
     );
   }
+
+  Stream<List<PostModel>> fetchUserPosts(List<CommunityModel> communities) {
+    if (communities.isNotEmpty) {
+      return _postRepository.fetchUserPosts(communities);
+    }
+
+    return Stream.value([]);
+  }
 }
