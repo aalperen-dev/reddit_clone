@@ -7,6 +7,7 @@ import 'package:reddit_clone/core/type_defs.dart';
 import 'package:reddit_clone/models/post_model.dart';
 
 import '../../../core/failure.dart';
+import '../../../models/community_model.dart';
 
 final postRepositoryProvider = Provider((ref) {
   return PostRepository(firestore: ref.watch(firestoreProvider));
@@ -30,6 +31,20 @@ class PostRepository {
         ),
       );
     }
+  }
+
+  Stream<List<PostModel>> fetchUserPosts(List<CommunityModel> communities) {
+    return _posts
+        .where('communityName',
+            whereIn: communities.map((e) => e.name).toList())
+        .orderBy(
+          'createdAt',
+          descending: true,
+        )
+        .snapshots()
+        .map((event) => event.docs
+            .map((e) => PostModel.fromMap(e.data() as Map<String, dynamic>))
+            .toList());
   }
 
   CollectionReference get _posts =>
