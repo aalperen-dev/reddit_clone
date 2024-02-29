@@ -57,6 +57,24 @@ class _AddPostTypeScreenState extends ConsumerState<AddPostTypeScreen> {
             selectedCommunity: selectedCommunity ?? communities[0],
             file: bannerFile,
           );
+    } else if (widget.type == 'text' && titleController.text.isNotEmpty) {
+      ref.read(postControllerProvider.notifier).shareTextPost(
+            context: context,
+            title: titleController.text.trim(),
+            selectedCommunity: selectedCommunity ?? communities[0],
+            description: descController.text.trim(),
+          );
+    } else if (widget.type == 'link' &&
+        linkController.text.isNotEmpty &&
+        titleController.text.isNotEmpty) {
+      ref.read(postControllerProvider.notifier).shareLinkPost(
+            context: context,
+            title: titleController.text.trim(),
+            selectedCommunity: selectedCommunity ?? communities[0],
+            link: linkController.text.trim(),
+          );
+    } else {
+      showSnackbar(context, 'Please enter all the fields');
     }
   }
 
@@ -66,119 +84,122 @@ class _AddPostTypeScreenState extends ConsumerState<AddPostTypeScreen> {
     final isTypeImage = widget.type == 'image';
     final isTypeText = widget.type == 'text';
     final isTypeLink = widget.type == 'link';
+    final isLoading = ref.watch(postControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Post ${widget.type}'),
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () => sharePost(),
             child: const Text('Share'),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            TextField(
-              decoration: const InputDecoration(
-                filled: true,
-                hintText: 'Enter title here',
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.all(18),
-              ),
-              controller: titleController,
-              maxLength: 30,
-            ),
-            const SizedBox(height: 10),
-            //
-            if (isTypeImage)
-              GestureDetector(
-                onTap: selectBannerImage,
-                child: DottedBorder(
-                  borderType: BorderType.RRect,
-                  radius: const Radius.circular(15),
-                  dashPattern: const [10, 4],
-                  strokeCap: StrokeCap.round,
-                  color: currentTheme.textTheme.bodyMedium!.color!,
-                  child: Container(
-                    width: double.infinity,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+      body: isLoading
+          ? const Loader()
+          : Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  TextField(
+                    decoration: const InputDecoration(
+                      filled: true,
+                      hintText: 'Enter title here',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(18),
                     ),
-                    child: bannerFile != null
-                        ? Image.file(bannerFile!)
-                        : const Center(
-                            child: Icon(
-                              Icons.camera_alt_outlined,
-                              size: 40,
-                            ),
+                    controller: titleController,
+                    maxLength: 30,
+                  ),
+                  const SizedBox(height: 10),
+                  //
+                  if (isTypeImage)
+                    GestureDetector(
+                      onTap: selectBannerImage,
+                      child: DottedBorder(
+                        borderType: BorderType.RRect,
+                        radius: const Radius.circular(15),
+                        dashPattern: const [10, 4],
+                        strokeCap: StrokeCap.round,
+                        color: currentTheme.textTheme.bodyMedium!.color!,
+                        child: Container(
+                          width: double.infinity,
+                          height: 150,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
                           ),
+                          child: bannerFile != null
+                              ? Image.file(bannerFile!)
+                              : const Center(
+                                  child: Icon(
+                                    Icons.camera_alt_outlined,
+                                    size: 40,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ),
+                  //
+                  if (isTypeText)
+                    TextField(
+                      decoration: const InputDecoration(
+                        filled: true,
+                        hintText: 'Enter description here',
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(18),
+                      ),
+                      controller: descController,
+                      maxLines: 5,
+                    ),
+                  //
+                  if (isTypeLink)
+                    TextField(
+                      decoration: const InputDecoration(
+                        filled: true,
+                        hintText: 'Enter link here',
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(18),
+                      ),
+                      controller: linkController,
+                    ),
+                  const SizedBox(height: 20),
+                  const Align(
+                    alignment: Alignment.topLeft,
+                    child: Text('Select Community'),
                   ),
-                ),
+                  //
+                  ref.watch(userCommunitiesProvider).when(
+                        data: (data) {
+                          communities = data;
+                          if (data.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
+                          return DropdownButton(
+                            value: selectedCommunity ?? data[0],
+                            items: data
+                                .map(
+                                  (e) => DropdownMenuItem(
+                                    value: e,
+                                    child: Text(e.name),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedCommunity = value;
+                              });
+                            },
+                          );
+                        },
+                        error: (error, stackTrace) => ErrorText(
+                          error: error.toString(),
+                        ),
+                        loading: () => const Loader(),
+                      ),
+                ],
               ),
-            //
-            if (isTypeText)
-              TextField(
-                decoration: const InputDecoration(
-                  filled: true,
-                  hintText: 'Enter description here',
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(18),
-                ),
-                controller: descController,
-                maxLines: 5,
-              ),
-            //
-            if (isTypeLink)
-              TextField(
-                decoration: const InputDecoration(
-                  filled: true,
-                  hintText: 'Enter link here',
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(18),
-                ),
-                controller: linkController,
-              ),
-            const SizedBox(height: 20),
-            const Align(
-              alignment: Alignment.topLeft,
-              child: Text('Select Community'),
             ),
-            //
-            ref.watch(userCommunitiesProvider).when(
-                  data: (data) {
-                    communities = data;
-                    if (data.isEmpty) {
-                      return const SizedBox.shrink();
-                    }
-                    return DropdownButton(
-                      value: selectedCommunity ?? data[0],
-                      items: data
-                          .map(
-                            (e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(e.name),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedCommunity = value;
-                        });
-                      },
-                    );
-                  },
-                  error: (error, stackTrace) => ErrorText(
-                    error: error.toString(),
-                  ),
-                  loading: () => const Loader(),
-                ),
-          ],
-        ),
-      ),
     );
   }
 }
