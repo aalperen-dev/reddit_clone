@@ -1,3 +1,4 @@
+import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
@@ -105,7 +106,30 @@ class PostCard extends ConsumerWidget {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.35,
                               width: double.infinity,
-                              child: Image.network(postModel.link!),
+                              child: Image.network(
+                                postModel.link!,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          if (isTypeLink)
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.35,
+                              width: double.infinity,
+                              child: AnyLinkPreview(
+                                link: postModel.link!,
+                                displayDirection:
+                                    UIDirection.uiDirectionHorizontal,
+                              ),
+                            ),
+                          if (isTypeText)
+                            Container(
+                              alignment: Alignment.bottomLeft,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: Text(
+                                postModel.description!,
+                                style: const TextStyle(color: Colors.grey),
+                              ),
                             ),
                         ],
                       ),
