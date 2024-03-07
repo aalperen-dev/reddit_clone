@@ -1,6 +1,7 @@
 import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reddit_clone/core/constants/constants.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 
 import 'package:reddit_clone/models/post_model.dart';
@@ -131,6 +132,63 @@ class PostCard extends ConsumerWidget {
                                 style: const TextStyle(color: Colors.grey),
                               ),
                             ),
+                          Row(
+                            children: [
+                              Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Assets.up,
+                                      size: 30,
+                                      color:
+                                          postModel.upvotes.contains(user.uid)
+                                              ? Pallete.redColor
+                                              : null,
+                                    ),
+                                  ),
+                                  //
+                                  Text(
+                                    '${postModel.upvotes.length - postModel.downvotes.length == 0 ? 'Vote' : postModel.upvotes.length - postModel.downvotes.length}',
+                                    style: const TextStyle(fontSize: 17),
+                                  ),
+                                  //
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Assets.down,
+                                      size: 30,
+                                      color:
+                                          postModel.downvotes.contains(user.uid)
+                                              ? Pallete.blueColor
+                                              : null,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              //
+                              Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Icons.comment,
+                                      size: 30,
+                                      color:
+                                          postModel.upvotes.contains(user.uid)
+                                              ? Pallete.redColor
+                                              : null,
+                                    ),
+                                  ),
+                                  //
+                                  Text(
+                                    '${postModel.commentCount == 0 ? 'Comment' : postModel.commentCount}',
+                                    style: const TextStyle(fontSize: 17),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     ),
