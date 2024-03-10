@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/core/constants/constants.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
+import 'package:reddit_clone/features/post/controller/post_controller.dart';
 
 import 'package:reddit_clone/models/post_model.dart';
 
@@ -14,6 +15,11 @@ class PostCard extends ConsumerWidget {
     super.key,
     required this.postModel,
   });
+
+  void deletePost(WidgetRef ref, BuildContext context) async {
+    ref.read(postControllerProvider.notifier).deletePost(postModel, context);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isTypeImage = postModel.type == 'image';
@@ -84,7 +90,10 @@ class PostCard extends ConsumerWidget {
                               ),
                               if (postModel.uid == user!.uid)
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () => deletePost(
+                                    ref,
+                                    context,
+                                  ),
                                   icon: Icon(
                                     Icons.delete,
                                     color: Pallete.redColor,
@@ -113,9 +122,9 @@ class PostCard extends ConsumerWidget {
                               ),
                             ),
                           if (isTypeLink)
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.35,
-                              width: double.infinity,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18),
                               child: AnyLinkPreview(
                                 link: postModel.link!,
                                 displayDirection:
@@ -188,16 +197,16 @@ class PostCard extends ConsumerWidget {
                                 ],
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

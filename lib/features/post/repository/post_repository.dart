@@ -21,7 +21,9 @@ class PostRepository {
 
   FutureVoid addPost(PostModel post) async {
     try {
-      return right(_posts.doc(post.id).set(post.toMap()));
+      return right(
+        _posts.doc(post.id).set(post.toMap()),
+      );
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -42,9 +44,27 @@ class PostRepository {
           descending: true,
         )
         .snapshots()
-        .map((event) => event.docs
-            .map((e) => PostModel.fromMap(e.data() as Map<String, dynamic>))
-            .toList());
+        .map(
+          (event) => event.docs
+              .map((e) => PostModel.fromMap(e.data() as Map<String, dynamic>))
+              .toList(),
+        );
+  }
+
+  FutureVoid deletePost(PostModel postModel) async {
+    try {
+      return right(
+        _posts.doc(postModel.id).delete(),
+      );
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(
+        Failure(
+          message: e.toString(),
+        ),
+      );
+    }
   }
 
   CollectionReference get _posts =>
