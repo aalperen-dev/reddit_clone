@@ -98,106 +98,108 @@ class _AddPostTypeScreenState extends ConsumerState<AddPostTypeScreen> {
       ),
       body: isLoading
           ? const Loader()
-          : Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  TextField(
-                    decoration: const InputDecoration(
-                      filled: true,
-                      hintText: 'Enter title here',
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(18),
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    TextField(
+                      decoration: const InputDecoration(
+                        filled: true,
+                        hintText: 'Enter title here',
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(18),
+                      ),
+                      controller: titleController,
+                      maxLength: 30,
                     ),
-                    controller: titleController,
-                    maxLength: 30,
-                  ),
-                  const SizedBox(height: 10),
-                  //
-                  if (isTypeImage)
-                    GestureDetector(
-                      onTap: selectBannerImage,
-                      child: DottedBorder(
-                        borderType: BorderType.RRect,
-                        radius: const Radius.circular(15),
-                        dashPattern: const [10, 4],
-                        strokeCap: StrokeCap.round,
-                        color: currentTheme.textTheme.bodyMedium!.color!,
-                        child: Container(
-                          width: double.infinity,
-                          height: 150,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
+                    const SizedBox(height: 10),
+                    //
+                    if (isTypeImage)
+                      GestureDetector(
+                        onTap: selectBannerImage,
+                        child: DottedBorder(
+                          borderType: BorderType.RRect,
+                          radius: const Radius.circular(15),
+                          dashPattern: const [10, 4],
+                          strokeCap: StrokeCap.round,
+                          color: currentTheme.textTheme.bodyMedium!.color!,
+                          child: Container(
+                            width: double.infinity,
+                            height: 150,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: bannerFile != null
+                                ? Image.file(bannerFile!)
+                                : const Center(
+                                    child: Icon(
+                                      Icons.camera_alt_outlined,
+                                      size: 40,
+                                    ),
+                                  ),
                           ),
-                          child: bannerFile != null
-                              ? Image.file(bannerFile!)
-                              : const Center(
-                                  child: Icon(
-                                    Icons.camera_alt_outlined,
-                                    size: 40,
-                                  ),
-                                ),
                         ),
                       ),
-                    ),
-                  //
-                  if (isTypeText)
-                    TextField(
-                      decoration: const InputDecoration(
-                        filled: true,
-                        hintText: 'Enter description here',
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(18),
-                      ),
-                      controller: descController,
-                      maxLines: 5,
-                    ),
-                  //
-                  if (isTypeLink)
-                    TextField(
-                      decoration: const InputDecoration(
-                        filled: true,
-                        hintText: 'Enter link here',
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(18),
-                      ),
-                      controller: linkController,
-                    ),
-                  const SizedBox(height: 20),
-                  const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text('Select Community'),
-                  ),
-                  //
-                  ref.watch(userCommunitiesProvider).when(
-                        data: (data) {
-                          communities = data;
-                          if (data.isEmpty) {
-                            return const SizedBox.shrink();
-                          }
-                          return DropdownButton(
-                            value: selectedCommunity ?? data[0],
-                            items: data
-                                .map(
-                                  (e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text(e.name),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedCommunity = value;
-                              });
-                            },
-                          );
-                        },
-                        error: (error, stackTrace) => ErrorText(
-                          error: error.toString(),
+                    //
+                    if (isTypeText)
+                      TextField(
+                        decoration: const InputDecoration(
+                          filled: true,
+                          hintText: 'Enter description here',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(18),
                         ),
-                        loading: () => const Loader(),
+                        controller: descController,
+                        maxLines: 5,
                       ),
-                ],
+                    //
+                    if (isTypeLink)
+                      TextField(
+                        decoration: const InputDecoration(
+                          filled: true,
+                          hintText: 'Enter link here',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(18),
+                        ),
+                        controller: linkController,
+                      ),
+                    const SizedBox(height: 20),
+                    const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text('Select Community'),
+                    ),
+                    //
+                    ref.watch(userCommunitiesProvider).when(
+                          data: (data) {
+                            communities = data;
+                            if (data.isEmpty) {
+                              return const SizedBox.shrink();
+                            }
+                            return DropdownButton(
+                              value: selectedCommunity ?? data[0],
+                              items: data
+                                  .map(
+                                    (e) => DropdownMenuItem(
+                                      value: e,
+                                      child: Text(e.name),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedCommunity = value;
+                                });
+                              },
+                            );
+                          },
+                          error: (error, stackTrace) => ErrorText(
+                            error: error.toString(),
+                          ),
+                          loading: () => const Loader(),
+                        ),
+                  ],
+                ),
               ),
             ),
     );
