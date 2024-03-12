@@ -16,8 +16,9 @@ final postRepositoryProvider = Provider((ref) {
 class PostRepository {
   final FirebaseFirestore _firestore;
 
-  PostRepository({required FirebaseFirestore firestore})
-      : _firestore = firestore;
+  PostRepository({
+    required FirebaseFirestore firestore,
+  }) : _firestore = firestore;
 
   FutureVoid addPost(PostModel post) async {
     try {
@@ -35,7 +36,9 @@ class PostRepository {
     }
   }
 
-  Stream<List<PostModel>> fetchUserPosts(List<CommunityModel> communities) {
+  Stream<List<PostModel>> fetchUserPosts(
+    List<CommunityModel> communities,
+  ) {
     return _posts
         .where('communityName',
             whereIn: communities.map((e) => e.name).toList())
@@ -51,7 +54,9 @@ class PostRepository {
         );
   }
 
-  FutureVoid deletePost(PostModel postModel) async {
+  FutureVoid deletePost(
+    PostModel postModel,
+  ) async {
     try {
       return right(
         _posts.doc(postModel.id).delete(),
@@ -64,6 +69,48 @@ class PostRepository {
           message: e.toString(),
         ),
       );
+    }
+  }
+
+  void upvote(
+    PostModel postModel,
+    String userId,
+  ) async {
+    if (postModel.downvotes.contains(userId)) {
+      _posts.doc(postModel.id).update({
+        'downvotes': FieldValue.arrayRemove([userId])
+      });
+    }
+
+    if (postModel.upvotes.contains(userId)) {
+      _posts.doc(postModel.id).update({
+        'upvotes': FieldValue.arrayRemove([userId])
+      });
+    } else {
+      _posts.doc(postModel.id).update({
+        'upvotes': FieldValue.arrayUnion([userId])
+      });
+    }
+  }
+
+  void downvote(
+    PostModel postModel,
+    String userId,
+  ) async {
+    if (postModel.upvotes.contains(userId)) {
+      _posts.doc(postModel.id).update({
+        'upvotes': FieldValue.arrayRemove([userId])
+      });
+    }
+
+    if (postModel.downvotes.contains(userId)) {
+      _posts.doc(postModel.id).update({
+        'downvotes': FieldValue.arrayRemove([userId])
+      });
+    } else {
+      _posts.doc(postModel.id).update({
+        'downvotes': FieldValue.arrayUnion([userId])
+      });
     }
   }
 
