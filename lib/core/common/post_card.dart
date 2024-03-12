@@ -17,7 +17,26 @@ class PostCard extends ConsumerWidget {
   });
 
   void deletePost(WidgetRef ref, BuildContext context) async {
-    ref.read(postControllerProvider.notifier).deletePost(postModel, context);
+    ref.read(postControllerProvider.notifier).deletePost(
+          postModel,
+          context,
+        );
+  }
+
+  void upvotePost(
+    WidgetRef ref,
+  ) async {
+    ref.read(postControllerProvider.notifier).upvote(
+          postModel,
+        );
+  }
+
+  void dwonvotePost(
+    WidgetRef ref,
+  ) async {
+    ref.read(postControllerProvider.notifier).downvote(
+          postModel,
+        );
   }
 
   @override
@@ -146,7 +165,7 @@ class PostCard extends ConsumerWidget {
                               Row(
                                 children: [
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () => upvotePost(ref),
                                     icon: Icon(
                                       Assets.up,
                                       size: 30,
@@ -163,7 +182,7 @@ class PostCard extends ConsumerWidget {
                                   ),
                                   //
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () => dwonvotePost(ref),
                                     icon: Icon(
                                       Assets.down,
                                       size: 30,
