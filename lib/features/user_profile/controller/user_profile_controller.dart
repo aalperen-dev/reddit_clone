@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reddit_clone/models/post_model.dart';
 import 'package:routemaster/routemaster.dart';
 
-import '../../../../core/providers/storage_repository_provider.dart';
-import '../../../../core/utils/utilities.dart';
-import '../../../../models/user_model.dart';
-import '../../../auth/controller/auth_controller.dart';
+import '../../../core/providers/storage_repository_provider.dart';
+import '../../../core/utils/utilities.dart';
+import '../../../models/user_model.dart';
+import '../../auth/controller/auth_controller.dart';
 import '../repository/user_profile_repository.dart';
 
 final userProfileControllerProvider =
@@ -19,6 +20,10 @@ final userProfileControllerProvider =
     storageRepository: storageRepository,
     ref: ref,
   );
+});
+
+final getUserPostsProvider = StreamProvider.family((ref, String uid) {
+  return ref.read(userProfileControllerProvider.notifier).getUserPosts(uid);
 });
 
 class UserProfileController extends StateNotifier<bool> {
@@ -78,5 +83,9 @@ class UserProfileController extends StateNotifier<bool> {
         Routemaster.of(context).pop();
       },
     );
+  }
+
+  Stream<List<PostModel>> getUserPosts(String uid) {
+    return _userProfileRepository.getUserPosts(uid);
   }
 }
