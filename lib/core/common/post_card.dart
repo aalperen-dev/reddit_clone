@@ -249,7 +249,7 @@ class PostCard extends ConsumerWidget {
                                           ),
                                         );
                                       }
-                                      return const SizedBox.shrink();
+                                      return const SizedBox();
                                     },
                                     error: (error, stackTrace) => ErrorText(
                                       error: error.toString(),

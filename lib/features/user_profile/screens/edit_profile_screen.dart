@@ -4,13 +4,13 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
-import 'package:reddit_clone/features/home/user_profile/controller/user_profile_controller.dart';
+import 'package:reddit_clone/features/user_profile/controller/user_profile_controller.dart';
 
-import '../../../../core/common/error_text.dart';
-import '../../../../core/common/loader.dart';
-import '../../../../core/constants/constants.dart';
-import '../../../../core/utils/utilities.dart';
-import '../../../../theme/pallete.dart';
+import '../../../core/common/error_text.dart';
+import '../../../core/common/loader.dart';
+import '../../../core/constants/constants.dart';
+import '../../../core/utils/utilities.dart';
+import '../../../theme/pallete.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   final String uid;

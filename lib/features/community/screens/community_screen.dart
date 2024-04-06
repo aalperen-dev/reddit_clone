@@ -7,6 +7,8 @@ import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/models/community_model.dart';
 import 'package:routemaster/routemaster.dart';
 
+import '../../../core/common/post_card.dart';
+
 class CommunityScreen extends ConsumerWidget {
   final String name;
   const CommunityScreen({
@@ -129,7 +131,22 @@ class CommunityScreen extends ConsumerWidget {
                   ),
                 ];
               },
-              body: Container(),
+              body: ref.watch(getCommunityPostsProvider(name)).when(
+                    data: (data) {
+                      return ListView.builder(
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          final post = data[index];
+
+                          return PostCard(postModel: post);
+                        },
+                      );
+                    },
+                    error: (error, stackTrace) => ErrorText(
+                      error: error.toString(),
+                    ),
+                    loading: () => const Loader(),
+                  ),
             ),
             error: (error, stackTrace) => ErrorText(error: error.toString()),
             loading: () => const Loader(),
