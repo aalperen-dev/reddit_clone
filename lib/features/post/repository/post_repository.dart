@@ -4,6 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:reddit_clone/core/constants/firebase_constants.dart';
 import 'package:reddit_clone/core/providers/firebase_provider.dart';
 import 'package:reddit_clone/core/type_defs.dart';
+import 'package:reddit_clone/models/comment_model.dart';
 import 'package:reddit_clone/models/post_model.dart';
 
 import '../../../core/failure.dart';
@@ -114,6 +115,24 @@ class PostRepository {
     }
   }
 
+  Stream<PostModel> getPostsById(String postId) {
+    return _posts.doc(postId).snapshots().map(
+          (event) => PostModel.fromMap(event.data() as Map<String, dynamic>),
+        );
+  }
+
+  FutureVoid addComment(CommentModel commentModel) async {
+    try {
+      return right(_comments.doc(commentModel.id).set(commentModel.toMap()));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
+
   CollectionReference get _posts =>
       _firestore.collection(FirebaseConstants.postsCollection);
+  CollectionReference get _comments =>
+      _firestore.collection(FirebaseConstants.commentsCollection);
 }

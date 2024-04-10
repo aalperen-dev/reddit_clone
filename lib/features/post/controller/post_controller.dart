@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/core/utils/utilities.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/features/post/repository/post_repository.dart';
+import 'package:reddit_clone/models/comment_model.dart';
 import 'package:reddit_clone/models/community_model.dart';
 import 'package:reddit_clone/models/post_model.dart';
 import 'package:routemaster/routemaster.dart';
@@ -28,6 +30,11 @@ final userPostsProvider =
     StreamProvider.family((ref, List<CommunityModel> communities) {
   final postController = ref.watch(postControllerProvider.notifier);
   return postController.fetchUserPosts(communities);
+});
+
+final getPostsByIdProvider = StreamProvider.family((ref, String postId) {
+  final postController = ref.watch(postControllerProvider.notifier);
+  return postController.getPostsById(postId);
 });
 
 class PostController extends StateNotifier<bool> {
@@ -201,5 +208,30 @@ class PostController extends StateNotifier<bool> {
   ) async {
     final uid = _ref.read(userProvider)!.uid;
     _postRepository.downvote(postModel, uid);
+  }
+
+  Stream<PostModel> getPostsById(String postId) {
+    return _postRepository.getPostsById(postId);
+  }
+
+  void addComment({
+    required BuildContext context,
+    required String text,
+    required PostModel postModel,
+  }) async {
+    final user = _ref.read(userProvider)!;
+    final String commentId = const Uuid().v1();
+    CommentModel commentModel = CommentModel(
+      id: commentId,
+      text: text,
+      createdAt: DateTime.now(),
+      postId: postModel.id,
+      username: user.name,
+      profilePic: user.profilePic,
+    );
+
+    final res = await _postRepository.addComment(commentModel);
+
+    res.fold((l) => showSnackbar(context, l.message), (r) => null);
   }
 }
