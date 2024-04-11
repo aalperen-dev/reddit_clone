@@ -7,13 +7,13 @@ environment:
   sdk: ">=3.2.3 <4.0.0"
 
 dependencies:
-  any_link_preview: ^3.0.1
-  cloud_firestore: ^4.16.0
+  any_link_preview: ^3.0.2
+  cloud_firestore: ^4.16.1
   dotted_border: ^2.1.0
   file_picker: ^8.0.0+1
-  firebase_auth: ^4.19.0
-  firebase_core: ^2.28.0
-  firebase_storage: ^11.7.0
+  firebase_auth: ^4.19.1
+  firebase_core: ^2.29.0
+  firebase_storage: ^11.7.1
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.5.1
@@ -21,7 +21,7 @@ dependencies:
   google_sign_in: ^6.2.1
   routemaster: ^1.0.1
   shared_preferences: ^2.2.2
-  uuid: ^4.3.3
+  uuid: ^4.4.0
 
 dev_dependencies:
   flutter_test:
