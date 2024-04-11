@@ -5,6 +5,7 @@ import 'package:reddit_clone/core/common/loader.dart';
 import 'package:reddit_clone/core/common/post_card.dart';
 
 import 'package:reddit_clone/features/post/controller/post_controller.dart';
+import 'package:reddit_clone/features/post/widgets/comment_card.dart';
 import 'package:reddit_clone/models/post_model.dart';
 
 class CommentsScreen extends ConsumerStatefulWidget {
@@ -34,6 +35,10 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
           text: commentController.text.trim(),
           postModel: postModel,
         );
+
+    setState(() {
+      commentController.text = '';
+    });
   }
 
   @override
@@ -54,6 +59,23 @@ class _CommentScreenState extends ConsumerState<CommentsScreen> {
                     ),
                     onSubmitted: (value) => addComment(data),
                   ),
+                  ref.watch(getPostCommentsProvider(widget.postId)).when(
+                        data: (data) {
+                          return Expanded(
+                            child: ListView.builder(
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                final comment = data[index];
+                                return CommentCard(commentModel: comment);
+                              },
+                            ),
+                          );
+                        },
+                        error: (error, stackTrace) => ErrorText(
+                          error: error.toString(),
+                        ),
+                        loading: () => const Loader(),
+                      ),
                 ],
               );
             },

@@ -123,12 +123,36 @@ class PostRepository {
 
   FutureVoid addComment(CommentModel commentModel) async {
     try {
-      return right(_comments.doc(commentModel.id).set(commentModel.toMap()));
+      await _comments.doc(commentModel.id).set(commentModel.toMap());
+      return right(
+        _posts
+            .doc(commentModel.postId)
+            .update({'commentCount': FieldValue.increment(1)}),
+      );
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
       return left(Failure(message: e.toString()));
     }
+  }
+
+  Stream<List<CommentModel>> getCommentsOfPost(String postId) {
+    return _comments
+        .where('postId', isEqualTo: postId)
+        .orderBy(
+          'createdAt',
+          descending: true,
+        )
+        .snapshots()
+        .map(
+          (event) => event.docs
+              .map(
+                (e) => CommentModel.fromMap(
+                  e.data() as Map<String, dynamic>,
+                ),
+              )
+              .toList(),
+        );
   }
 
   CollectionReference get _posts =>
