@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/core/common/error_text.dart';
 import 'package:reddit_clone/core/common/loader.dart';
-import 'package:reddit_clone/core/constants/constants.dart';
 import 'package:reddit_clone/core/utils/utilities.dart';
 import 'package:reddit_clone/features/community/controller/community_controller.dart';
 import 'package:reddit_clone/models/community_model.dart';
 import 'package:reddit_clone/theme/pallete.dart';
+
+import '../../../core/constants/assets.dart';
 
 class EditCommunityScreen extends ConsumerStatefulWidget {
   final String name;
