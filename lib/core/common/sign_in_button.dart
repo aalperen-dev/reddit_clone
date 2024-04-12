@@ -1,8 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:reddit_clone/core/constants/constants.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/theme/pallete.dart';
+
+import '../constants/assets.dart';
 
 class SignInButton extends ConsumerWidget {
   const SignInButton({super.key});
@@ -18,7 +19,7 @@ class SignInButton extends ConsumerWidget {
       child: ElevatedButton.icon(
         onPressed: () => signInWithGoogle(context, ref),
         icon: Image.asset(
-          Assets.google,
+          Assets.imagesGoogle,
           width: 35,
         ),
         label: const Text(

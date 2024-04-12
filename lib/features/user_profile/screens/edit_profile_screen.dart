@@ -8,7 +8,7 @@ import 'package:reddit_clone/features/user_profile/controller/user_profile_contr
 
 import '../../../core/common/error_text.dart';
 import '../../../core/common/loader.dart';
-import '../../../core/constants/constants.dart';
+import '../../../core/constants/assets.dart';
 import '../../../core/utils/utilities.dart';
 import '../../../theme/pallete.dart';
 
