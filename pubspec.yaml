@@ -20,7 +20,7 @@ dependencies:
   fpdart: ^1.1.0
   google_sign_in: ^6.2.1
   routemaster: ^1.0.1
-  shared_preferences: ^2.2.2
+  shared_preferences: ^2.2.3
   uuid: ^4.4.0
 
 dev_dependencies:
@@ -33,6 +33,7 @@ flutter:
   assets:
     - assets/fonts/
     - assets/images/
+    - assets/images/awards/
   fonts:
     - family: MyFlutterApp
       fonts:
@@ -42,3 +43,5 @@ flutter_assets:
   assets_path: assets/
   output_path: lib/core/constants/
   filename: assets.dart
+  class_name: Assets
+  field_prefix:

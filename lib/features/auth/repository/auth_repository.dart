@@ -3,12 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:reddit_clone/core/constants/constants.dart';
 import 'package:reddit_clone/core/constants/firebase_constants.dart';
 import 'package:reddit_clone/core/failure.dart';
 import 'package:reddit_clone/core/providers/firebase_provider.dart';
 import 'package:reddit_clone/models/user_model.dart';
 
+import '../../../core/constants/assets.dart';
 import '../../../core/type_defs.dart';
 
 final authRepositoryProvider = Provider((ref) {
@@ -64,7 +64,11 @@ class AuthRepository {
           banner: Assets.bannerDefault,
           isAuthenticated: true,
           karma: 0,
-          awards: [],
+          awards: [
+            'til',
+            'gold',
+            'rocket',
+          ],
         );
         await _users.doc(userCredential.user!.uid).set(userModel.toMap());
       } else {

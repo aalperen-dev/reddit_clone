@@ -4,7 +4,7 @@ import 'package:reddit_clone/core/common/loader.dart';
 import 'package:reddit_clone/core/common/sign_in_button.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 
-import '../../../core/constants/constants.dart';
+import '../../../core/constants/assets.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -16,7 +16,7 @@ class LoginScreen extends ConsumerWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Image.asset(
-          Assets.logo,
+          Assets.imagesLogo,
           height: 40,
         ),
         actions: [
@@ -48,7 +48,7 @@ class LoginScreen extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.asset(
-                      Assets.loginEmote,
+                      Assets.imagesLoginEmote,
                       height: 270,
                     ),
                   ),
