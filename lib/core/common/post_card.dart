@@ -1,5 +1,6 @@
 import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/core/common/error_text.dart';
 import 'package:reddit_clone/core/common/loader.dart';
@@ -40,6 +41,18 @@ class PostCard extends ConsumerWidget {
   ) async {
     ref.read(postControllerProvider.notifier).downvote(
           postModel,
+        );
+  }
+
+  void awardPost(
+    WidgetRef ref,
+    BuildContext context,
+    String award,
+  ) async {
+    ref.read(postControllerProvider.notifier).awardPost(
+          context: context,
+          postModel: postModel,
+          award: award,
         );
   }
 
@@ -143,6 +156,23 @@ class PostCard extends ConsumerWidget {
                             ],
                           ),
                           //
+                          if (postModel.awards.isNotEmpty) ...[
+                            const SizedBox(height: 5),
+                            SizedBox(
+                              height: 25,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: postModel.awards.length,
+                                itemBuilder: (context, index) {
+                                  final award = postModel.awards[index];
+                                  return Image.asset(
+                                    Assets.awards[award]!,
+                                    height: 20,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(
@@ -278,11 +308,15 @@ class PostCard extends ConsumerWidget {
                                           itemBuilder: (context, index) {
                                             final award = user.awards[index];
 
-                                            return Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Image.asset(
-                                                  Assets.awards[award]!),
+                                            return GestureDetector(
+                                              onTap: () => awardPost(
+                                                  ref, context, award),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Image.asset(
+                                                    Assets.awards[award]!),
+                                              ),
                                             );
                                             // return null;
                                           },
