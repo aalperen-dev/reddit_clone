@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -263,6 +264,29 @@ class PostController extends StateNotifier<bool> {
         .updateUserKarma(UserKarma.comment);
 
     res.fold((l) => showSnackbar(context, l.message), (r) => null);
+  }
+
+  void awardPost({
+    required BuildContext context,
+    required PostModel postModel,
+    required String award,
+  }) async {
+    final user = _ref.read(userProvider)!;
+
+    final res = await _postRepository.awardPost(postModel, award, user.uid);
+
+    res.fold((l) => showSnackbar(context, l.message), (r) {
+      _ref
+          .read(userProfileControllerProvider.notifier)
+          .updateUserKarma(UserKarma.awardPost);
+
+      _ref.read(userProvider.notifier).update((state) {
+        state?.awards.remove(award);
+        return state;
+      });
+
+      Routemaster.of(context).pop();
+    });
   }
 
   Stream<List<CommentModel>> fetchPostComments(String postId) {
