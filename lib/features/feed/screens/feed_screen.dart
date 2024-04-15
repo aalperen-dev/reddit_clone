@@ -5,13 +5,39 @@ import 'package:reddit_clone/core/common/loader.dart';
 import 'package:reddit_clone/core/common/post_card.dart';
 import 'package:reddit_clone/features/community/controller/community_controller.dart';
 import 'package:reddit_clone/features/post/controller/post_controller.dart';
+import '../../auth/controller/auth_controller.dart';
 
 class FeedScreen extends ConsumerWidget {
   const FeedScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(userCommunitiesProvider).when(
-          data: (data) => ref.watch(userPostsProvider(data)).when(
+    final user = ref.watch(userProvider)!;
+    final isGuest = !user.isAuthenticated;
+
+    if (!isGuest) {
+      return ref.watch(userCommunitiesProvider).when(
+            data: (data) => ref.watch(userPostsProvider(data)).when(
+                  data: (data) {
+                    return ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        final post = data[index];
+
+                        return PostCard(postModel: post);
+                      },
+                    );
+                  },
+                  error: (error, stackTrace) =>
+                      ErrorText(error: error.toString()),
+                  loading: () => const Loader(),
+                ),
+            error: (error, stackTrace) => ErrorText(error: error.toString()),
+            loading: () => const Loader(),
+          );
+    }
+
+    return ref.watch(guestPostsProvider).when(
+          data: (data) => ref.watch(guestPostsProvider).when(
                 data: (data) {
                   return ListView.builder(
                     itemCount: data.length,

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -38,7 +39,7 @@ class AuthRepository {
 
   Stream<User?> get authStateChange => _firebaseAuth.authStateChanges();
 
-  FutureEither<UserModel> signInWithGoogle() async {
+  FutureEither<UserModel> signInWithGoogle(bool isFromLogin) async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await _googleSignIn.signIn();
@@ -50,12 +51,20 @@ class AuthRepository {
         idToken: googleAuth?.idToken,
       );
 
-      UserCredential userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
+      UserCredential userCredential;
+      if (isFromLogin) {
+        userCredential = await _firebaseAuth.signInWithCredential(credential);
+      } else {
+        userCredential =
+            await _firebaseAuth.currentUser!.linkWithCredential(credential);
+      }
 
-      print(userCredential.user?.email);
+      if (kDebugMode) {
+        print(userCredential.user?.email);
+      }
 
       UserModel userModel;
+
       if (userCredential.additionalUserInfo!.isNewUser) {
         userModel = UserModel(
           uid: userCredential.user!.uid,
@@ -76,10 +85,14 @@ class AuthRepository {
       }
       return right(userModel);
     } on FirebaseException catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
       throw e.message!;
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
       return left(Failure(message: e.toString()));
     }
   }
@@ -88,7 +101,9 @@ class AuthRepository {
     try {
       var userCredential = await _firebaseAuth.signInAnonymously();
 
-      print(userCredential.user?.email);
+      if (kDebugMode) {
+        print(userCredential.user?.email);
+      }
 
       UserModel userModel = UserModel(
         uid: userCredential.user!.uid,
@@ -103,10 +118,14 @@ class AuthRepository {
 
       return right(userModel);
     } on FirebaseException catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
       throw e.message!;
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
       return left(Failure(message: e.toString()));
     }
   }
