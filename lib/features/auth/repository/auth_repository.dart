@@ -41,26 +41,34 @@ class AuthRepository {
 
   FutureEither<UserModel> signInWithGoogle(bool isFromLogin) async {
     try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signIn();
-
-      final googleAuth = await googleSignInAccount?.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
       UserCredential userCredential;
-      if (isFromLogin) {
-        userCredential = await _firebaseAuth.signInWithCredential(credential);
-      } else {
+      if (kIsWeb) {
+        GoogleAuthProvider googleAuthProvider = GoogleAuthProvider();
+        googleAuthProvider
+            .addScope('https://www.googleapis.com/auth/contacts.readonly');
         userCredential =
-            await _firebaseAuth.currentUser!.linkWithCredential(credential);
-      }
+            await _firebaseAuth.signInWithPopup(googleAuthProvider);
+      } else {
+        final GoogleSignInAccount? googleSignInAccount =
+            await _googleSignIn.signIn();
 
-      if (kDebugMode) {
-        print(userCredential.user?.email);
+        final googleAuth = await googleSignInAccount?.authentication;
+
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken,
+          idToken: googleAuth?.idToken,
+        );
+
+        if (isFromLogin) {
+          userCredential = await _firebaseAuth.signInWithCredential(credential);
+        } else {
+          userCredential =
+              await _firebaseAuth.currentUser!.linkWithCredential(credential);
+        }
+
+        if (kDebugMode) {
+          print(userCredential.user?.email);
+        }
       }
 
       UserModel userModel;
