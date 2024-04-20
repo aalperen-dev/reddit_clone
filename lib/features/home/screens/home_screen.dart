@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
@@ -6,6 +7,7 @@ import 'package:reddit_clone/features/home/delegates/search_community_delegate.d
 import 'package:reddit_clone/features/home/drawers/community_list_drawer.dart';
 import 'package:reddit_clone/features/home/drawers/profile_drawer.dart';
 import 'package:reddit_clone/theme/pallete.dart';
+import 'package:routemaster/routemaster.dart';
 
 import '../../../core/constants/assets.dart';
 
@@ -57,6 +59,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             },
             icon: const Icon(Icons.search),
           ),
+          // web
+          IconButton(
+            onPressed: () {
+              Routemaster.of(context).push('/add-post');
+            },
+            icon: const Icon(Icons.add),
+          ),
+
+          //
           Builder(
             builder: (context) {
               return IconButton(
@@ -72,7 +83,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: Assets.tabWidgets[_page],
       drawer: const CummunityListDrawer(),
       endDrawer: isGuest ? null : const ProfileDrawer(),
-      bottomNavigationBar: isGuest
+      bottomNavigationBar: isGuest || kIsWeb
           ? null
           : CupertinoTabBar(
               activeColor: currentTheme.iconTheme.color,
