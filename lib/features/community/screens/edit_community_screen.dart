@@ -71,6 +71,8 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
           communityModel: communityModel,
           profileFile: profileFile,
           bannerFile: bannerFile,
+          profileWebFile: profileWebFile,
+          bannerWebFile: bannerWebFile,
         );
   }
 

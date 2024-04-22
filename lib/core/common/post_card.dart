@@ -1,5 +1,7 @@
 import 'package:any_link_preview/any_link_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/core/common/error_text.dart';
 import 'package:reddit_clone/core/common/loader.dart';
@@ -89,7 +91,41 @@ class PostCard extends ConsumerWidget {
               vertical: 10,
             ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (kIsWeb)
+                  Column(
+                    children: [
+                      IconButton(
+                        onPressed: isGuest ? () {} : () => upvotePost(ref),
+                        icon: Icon(
+                          Assets.up,
+                          size: 30,
+                          color: postModel.upvotes.contains(user.uid)
+                              ? Pallete.redColor
+                              : null,
+                        ),
+                      ),
+                      //
+                      Text(
+                        '${postModel.upvotes.length - postModel.downvotes.length == 0 ? 'Vote' : postModel.upvotes.length - postModel.downvotes.length}',
+                        style: const TextStyle(fontSize: 17),
+                      ),
+                      //
+                      IconButton(
+                        onPressed: isGuest ? () {} : () => downvotePost(ref),
+                        icon: Icon(
+                          Assets.down,
+                          size: 30,
+                          color: postModel.downvotes.contains(user.uid)
+                              ? Pallete.blueColor
+                              : null,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                //
                 Expanded(
                   child: Column(
                     children: [
@@ -193,7 +229,7 @@ class PostCard extends ConsumerWidget {
                                 width: double.infinity,
                                 child: Image.network(
                                   postModel.link!,
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.contain,
                                 ),
                               ),
                             if (isTypeLink)
@@ -216,45 +252,47 @@ class PostCard extends ConsumerWidget {
                                   style: const TextStyle(color: Colors.grey),
                                 ),
                               ),
+
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      onPressed: isGuest
-                                          ? () {}
-                                          : () => upvotePost(ref),
-                                      icon: Icon(
-                                        Assets.up,
-                                        size: 30,
-                                        color:
-                                            postModel.upvotes.contains(user.uid)
-                                                ? Pallete.redColor
-                                                : null,
+                                if (!kIsWeb)
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: isGuest
+                                            ? () {}
+                                            : () => upvotePost(ref),
+                                        icon: Icon(
+                                          Assets.up,
+                                          size: 30,
+                                          color: postModel.upvotes
+                                                  .contains(user.uid)
+                                              ? Pallete.redColor
+                                              : null,
+                                        ),
                                       ),
-                                    ),
-                                    //
-                                    Text(
-                                      '${postModel.upvotes.length - postModel.downvotes.length == 0 ? 'Vote' : postModel.upvotes.length - postModel.downvotes.length}',
-                                      style: const TextStyle(fontSize: 17),
-                                    ),
-                                    //
-                                    IconButton(
-                                      onPressed: isGuest
-                                          ? () {}
-                                          : () => downvotePost(ref),
-                                      icon: Icon(
-                                        Assets.down,
-                                        size: 30,
-                                        color: postModel.downvotes
-                                                .contains(user.uid)
-                                            ? Pallete.blueColor
-                                            : null,
+                                      //
+                                      Text(
+                                        '${postModel.upvotes.length - postModel.downvotes.length == 0 ? 'Vote' : postModel.upvotes.length - postModel.downvotes.length}',
+                                        style: const TextStyle(fontSize: 17),
                                       ),
-                                    ),
-                                  ],
-                                ),
+                                      //
+                                      IconButton(
+                                        onPressed: isGuest
+                                            ? () {}
+                                            : () => downvotePost(ref),
+                                        icon: Icon(
+                                          Assets.down,
+                                          size: 30,
+                                          color: postModel.downvotes
+                                                  .contains(user.uid)
+                                              ? Pallete.blueColor
+                                              : null,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 //
                                 Row(
                                   children: [
