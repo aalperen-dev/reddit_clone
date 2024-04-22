@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:reddit_clone/core/failure.dart';
@@ -22,14 +23,22 @@ class StorageRepository {
     required String path,
     required String id,
     required File? file,
+    required Uint8List? webFile,
   }) async {
     try {
       final ref = _firebaseStorage.ref().child(path).child(id);
-
-      UploadTask uploadTask = ref.putFile(
-        file!,
-        SettableMetadata(contentType: 'image/jpg'),
-      );
+      UploadTask uploadTask;
+      if (kIsWeb) {
+        uploadTask = ref.putData(
+          webFile!,
+          SettableMetadata(contentType: 'image/jpg'),
+        );
+      } else {
+        uploadTask = ref.putFile(
+          file!,
+          SettableMetadata(contentType: 'image/jpg'),
+        );
+      }
 
       final snapshot = await uploadTask;
 

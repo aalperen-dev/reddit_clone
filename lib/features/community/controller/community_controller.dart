@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
@@ -118,24 +119,28 @@ class CommunityController extends StateNotifier<bool> {
     required CommunityModel communityModel,
     required File? profileFile,
     required File? bannerFile,
+    required Uint8List? profileWebFile,
+    required Uint8List? bannerWebFile,
   }) async {
     state = true;
-    if (profileFile != null) {
+    if (profileFile != null || profileWebFile != null) {
       final res = await _storageRepository.storeFiles(
         path: 'communities/profile',
         id: communityModel.name,
         file: profileFile,
+        webFile: profileWebFile,
       );
       res.fold(
         (l) => showSnackbar(context, l.message),
         (r) => communityModel = communityModel.copyWith(avatar: r),
       );
     }
-    if (bannerFile != null) {
+    if (bannerFile != null || bannerWebFile != null) {
       final res = await _storageRepository.storeFiles(
         path: 'communities/banner',
         id: communityModel.name,
         file: bannerFile,
+        webFile: bannerWebFile,
       );
       res.fold(
         (l) => showSnackbar(context, l.message),
